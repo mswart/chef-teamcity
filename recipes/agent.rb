@@ -27,6 +27,7 @@ node['teamcity']['agents'].each do |name, agent| # multiple agents
 
   if agent['server_url'].nil?
     Chef::Log.fatal "You need to setup the server url for agent #{name}"
+    next
   end
 
   # Create the users' group
