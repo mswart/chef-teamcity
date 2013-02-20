@@ -67,7 +67,7 @@ node['teamcity']['agents'].each do |name, agent| # multiple agents
   execute "unzip #{install_file} -d #{agent[:base]}" do
     user agent[:user]
     creates "#{agent['base']}/bin"
-    not_if { installed_check.call or ::File.exists? install_file }
+    not_if { installed_check.call or not ::File.exists? install_file }
   end
 
   file install_file do
