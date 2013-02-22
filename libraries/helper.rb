@@ -111,7 +111,7 @@ module Teamcity
       build_info = find_build_by_version(@new_resource.build_type,@new_resource.version)
       build_id =  build_info['id']
       path = "repository/downloadAll/#{@new_resource.build_type}/#{build_id}:id/artifacts.zip"
-      get_file(build_uri(path,nil),"#{destination}")
+      get_file(build_uri(path,nil), destination)
     end
 
     def download_files(files,destination)

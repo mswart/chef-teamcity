@@ -19,6 +19,15 @@
 
 actions :download
 
+# Chef 0.10.10 or greater
+default_action :download if defined?(default_action) # Chef > 10.8
+
+# Default action for Chef <= 10.8
+def initialize(*args)
+  super
+  @action = :download
+end
+
 attribute :build_type, :required => true, :kind_of => String
 attribute :version, :kind_of => [String,Symbol]
 attribute :overwrite, :kind_of => [TrueClass,FalseClass], :default => false
