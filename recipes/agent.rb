@@ -29,6 +29,20 @@ node.teamcity.agents.each do |name, agent| # multiple agents
     raise message
   end
 
+  # Set runtime specific default values for non default agent
+  agent['user']  ||= 'teamcity'
+  agent['group'] ||= 'teamcity'
+  agent['home']  ||= "/home/" + agent['user']
+  agent['base']  ||= agent['home']
+
+  agent['system_dir'] ||= agent['base']
+  agent['work_dir']   ||= "#{agent['base']}/work"
+  agent['temp_dir']   ||= "#{agent['base']}/tmp"
+  agent['own_port']   ||= 9090
+
+  agent['system_properties'] ||= {}
+  agent['env_properties']    ||= {}
+
   # Create the users' group
   group agent.group do
   end
