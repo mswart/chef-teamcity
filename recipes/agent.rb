@@ -59,6 +59,11 @@ node.teamcity.agents.each do |name, agent| # multiple agents
     not_if &installed_check
   end
 
+  package 'psmisc' do
+    action :install
+    not_if &installed_check
+  end
+
   package 'unzip' do
     action :install
     not_if &installed_check
