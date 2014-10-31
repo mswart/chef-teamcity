@@ -20,9 +20,17 @@
 module Teamcity
   class Utility
     include Teamcity::Helper
-    def get_latest_build(build_type)
+    def get_latest_build(build_type, branch=nil)
+      params = {
+        :status => 'SUCCESS',
+        :count => '1'
+      }
 
-      version = get_json(build_rest_uri("buildTypes/id:#{build_type}/builds",'status'=>'SUCCESS','count'=>'1'))['build'][0]['number']
+      if branch.to_s != ""
+        params[:locator] = "branch:#{branch}"
+      end
+
+      version = get_json(build_rest_uri("buildTypes/id:#{build_type}/builds", params))['build'][0]['number']
       version
     end
 
