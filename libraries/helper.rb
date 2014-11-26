@@ -126,8 +126,7 @@ module Teamcity
     def build_query_string(params)
       qs = ''
       params.each do |key,value|
-        qs = "?" if qs.eql? ''
-        qs << "&" unless qs.eql? '?'
+        qs << "&" unless qs.eql? ''
         qs << "#{key}=#{value}"
       end
       qs
