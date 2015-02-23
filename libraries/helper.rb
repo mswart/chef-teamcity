@@ -51,7 +51,7 @@ module Teamcity
           raise Teamcity::Exceptions::FileAlreadyExists "Cannot download file, #{destination} already exists, use :overwrite"
         end
       end
-      Chef::Log.info "Downloading #{uri} to #{destination}. This may take a while..."
+      Chef::Log.warn "Downloading artifacts to #{destination}. This may take a while..."
       Net::HTTP.start(uri.host, uri.port) { |http|
         Chef::Log.debug "Starting HTTP session..."
         http.request req do |response|
