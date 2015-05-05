@@ -113,7 +113,7 @@ module Teamcity
     def download_all(destination)
       version = @new_resource.version
       build_type = @new_resource.build_type
-      version.empty? ? build_info = find_build(build_type) : build_info = find_build_by_version(build_type, version)
+      version.to_s == '' ? build_info = find_build(build_type) : build_info = find_build_by_version(build_type, version)
       path = "repository/downloadAll/#{build_type}/#{build_info['id']}:id/artifacts.zip"
       get_file(build_uri(path,nil),"#{destination}")
     end
@@ -121,7 +121,7 @@ module Teamcity
     def download_files(files,destination)
       version = @new_resource.version
       build_type = @new_resource.build_type
-      version.empty? ? build_info = find_build(build_type) : build_info = find_build_by_version(build_type, version)
+      version.to_s == '' ? build_info = find_build(build_type) : build_info = find_build_by_version(build_type, version)
       files.each do |file|
         path = "repository/download/#{build_type}/#{build_info['id']}:id/#{file}"
         get_file(build_uri(path,nil),File.join(destination,file))
