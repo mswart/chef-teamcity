@@ -1,10 +1,10 @@
 name             'teamcity'
-maintainer       "Malte Swart"
-maintainer_email "chef@maltswart.de"
+maintainer       "Daniel Jimenez"
+maintainer_email "daniel.j.jimenez@gmail.com"
 license          "Apache License, Version 2.0"
 description      "Provides integration with teamcity for getting bits from teamcity or setup build agents"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
-version          "0.2.2"
+version          "0.2.5"
 
 recommends "java"
 
