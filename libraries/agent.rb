@@ -91,7 +91,7 @@ module Teamcity
     end
 
     def home
-      @agent['home'] || File.join('', 'home', user)
+      @agent['home'] || Dir.home(user)
     end
 
     def system_dir

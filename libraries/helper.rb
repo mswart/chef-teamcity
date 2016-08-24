@@ -35,7 +35,7 @@ module Teamcity
      if res.is_a?(Net::HTTPSuccess)
         JSON.parse(res.body)
      else
-       Chef::Log.debug "Server returned code #{res.code}"
+       Chef::Log.warn "Server returned code #{res.code}"
        raise Teamcity::Exceptions::InvalidServerResponse
      end
     end
@@ -51,7 +51,7 @@ module Teamcity
           raise Teamcity::Exceptions::FileAlreadyExists "Cannot download file, #{destination} already exists, use :overwrite"
         end
       end
-      Chef::Log.info "Downloading file to #{destination}. This may take a while..."
+      Chef::Log.warn "Downloading artifacts from #{uri} to #{destination}. This may take a while..."
       Net::HTTP.start(uri.host, uri.port) { |http|
         Chef::Log.debug "Starting HTTP session..."
         http.request req do |response|
@@ -102,23 +102,28 @@ module Teamcity
     end
 
     def find_build_by_version( build_type, version )
-
       get_json(build_rest_uri("buildTypes/id:#{build_type}/builds/number:#{version}",nil))
+    end
 
+    def find_build(build_type)
+        build_rest_uri = build_rest_uri("buildTypes/id:#{build_type}/builds", 'status' => 'SUCCESS', 'count' => '1')
+        get_json(build_rest_uri)['build'][0]
     end
 
     def download_all(destination)
-      build_info = find_build_by_version(@new_resource.build_type,@new_resource.version)
-      build_id =  build_info['id']
-      path = "repository/downloadAll/#{@new_resource.build_type}/#{build_id}:id/artifacts.zip"
+      version = @new_resource.version
+      build_type = @new_resource.build_type
+      version.to_s == '' ? build_info = find_build(build_type) : build_info = find_build_by_version(build_type, version)
+      path = "repository/downloadAll/#{build_type}/#{build_info['id']}:id/artifacts.zip"
       get_file(build_uri(path,nil),"#{destination}")
     end
 
     def download_files(files,destination)
-      build_info = find_build_by_version(@new_resource.build_type,@new_resource.version)
-      build_id =  build_info['id']
+      version = @new_resource.version
+      build_type = @new_resource.build_type
+      version.to_s == '' ? build_info = find_build(build_type) : build_info = find_build_by_version(build_type, version)
       files.each do |file|
-        path = "repository/download/#{@new_resource.build_type}/#{build_id}:id/#{file}"
+        path = "repository/download/#{build_type}/#{build_info['id']}:id/#{file}"
         get_file(build_uri(path,nil),File.join(destination,file))
       end
     end
